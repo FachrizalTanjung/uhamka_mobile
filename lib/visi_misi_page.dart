@@ -1,5 +1,60 @@
 import 'package:flutter/material.dart';
 
+class Entry {
+  final String title;
+  final List<Entry> children;
+
+  Entry(this.title, [this.children = const <Entry>[]]);
+}
+
+class EntryItem extends StatelessWidget {
+  const EntryItem(this.entry);
+
+  final Entry entry;
+
+  Widget _buildTiles(Entry root) {
+    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+    return Container(
+      child: ExpansionTile(
+        key: PageStorageKey<Entry>(root),
+        title: Text(
+          root.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        children: root.children.map<Widget>(_buildTiles).toList(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
+  }
+}
+
+final List<Entry> data = <Entry>[
+  Entry(
+    'Visi',
+    <Entry>[
+      Entry(
+          'Merealisasikan HIMA TI UHAMKA yang bergerak aktif dan inovatif dibidang akademik dan non akademik secara internal maupun eksternal.'),
+    ],
+  ),
+  Entry(
+    'Misi',
+    <Entry>[
+      Entry(
+          '1. Merealisasikan HIMA TI UHAMKA yang bergerak aktif dan inovatif dibidang akademik dan non akademik secara internal maupun eksternal.'),
+      Entry(
+          '2. Mengembangkan dan Menyalurkan potensi mahasiswa Teknik Informatika dibidang akademik dan non akademik.'),
+      Entry('3. Membuat suasana nyaman dan rasa memiliki atas HIMA TI UHAMKA.'),
+      Entry('4. Meningkatkan etos kerja dalam mencapai visi dan misi'),
+    ],
+  ),
+];
+
 class VisiMisiPage extends StatelessWidget {
   static String tag = 'visi-misi-page';
 
@@ -9,34 +64,20 @@ class VisiMisiPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Visi & Misi'),
       ),
-      body: new Stack(
-        children: <Widget>[
-          new Container(
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("assets/logo-hima-uhamka.jpg"),
-                fit: BoxFit.fill,
-              ),
-            ),
+      body: new Container(
+        decoration: new BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage("assets/logo-hima-uhamka.jpg"),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2), BlendMode.dstATop),
           ),
-          // new Center(
-          //   child: Column(
-          //     children: <Widget>[
-          //       Text(
-          //         "Visi",
-          //         textAlign: TextAlign.center,
-          //       )
-          //     ],
-          //   ),
-          // ),
-          new Container(
-            margin: const EdgeInsets.only(top: 10.0, left: 10.0),
-            child: Text(
-              "Visi",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
-            ),
-          ),
-        ],
+        ),
+        child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) =>
+              EntryItem(data[index]),
+          itemCount: data.length,
+        ),
       ),
     );
   }

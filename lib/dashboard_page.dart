@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uhamka_mobile/data_dosen_page.dart';
+import 'package:uhamka_mobile/data_mahasiswa_page.dart';
 import 'package:uhamka_mobile/visi_misi_page.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -7,6 +9,18 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text('Halaman Utama'),
       ),
@@ -14,77 +28,132 @@ class DashboardPage extends StatelessWidget {
         children: <Widget>[
           new Container(
             decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("assets/bg-login.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
+                // color: Colors.red,
+                image: DecorationImage(
+              image: AssetImage('assets/teknik.png'),
+            )),
           ),
-          new Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(VisiMisiPage.tag);
-                      },
-                      icon: Icon(Icons.add_comment),
-                      label: Text("Himpunan Mahasiswa"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.book),
-                      label: Text("Mata Kuliah"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.exposure),
-                      label: Text("Nilai Mahasiswa"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.face),
-                      label: Text("Data Dosen"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.sentiment_very_satisfied),
-                      label: Text("Profil Mahasiswa"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.transit_enterexit),
-                      label: Text("Logout"),
-                    )),
-                SizedBox(
-                    width: 200.0,
-                    height: 50.0,
-                    child: RaisedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.add_comment),
-                      label: Text("Himpunan Mahasiswa"),
-                    )),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(VisiMisiPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.photo),
+                            Text('Himpunan'),
+                            Text('Mahasiswa'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {},
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.portrait),
+                            Text('Kegiatan'),
+                            Text('Mahasiswa'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(DataDosenPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.supervised_user_circle),
+                            Text('Data'),
+                            Text('Dosen'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(DataMahasiswaPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.assignment_ind),
+                            Text('Data'),
+                            Text('Mahasiswa'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {},
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.book),
+                            Text('Mata'),
+                            Text('Kuliah'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {},
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.book),
+                            Text('Nilai'),
+                            Text('Mahasiswa'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
           ),
         ],
       ),

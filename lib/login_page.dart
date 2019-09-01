@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                image: new AssetImage("assets/bg-login.jpg"),
+                image: new AssetImage("assets/teknik.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -27,21 +27,21 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Selamat Datang",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  "di",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  "UHAMKA MOBILE",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
-                  textAlign: TextAlign.center,
-                ),
+                // Text(
+                //   "Selamat Datang",
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+                //   textAlign: TextAlign.center,
+                // ),
+                // Text(
+                //   "di",
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+                //   textAlign: TextAlign.center,
+                // ),
+                // Text(
+                //   "UHAMKA MOBILE",
+                //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+                //   textAlign: TextAlign.center,
+                // ),
               ],
             ),
           ),
