@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uhamka_mobile/dashboard_page.dart';
 import 'package:uhamka_mobile/data_dosen_page.dart';
 import 'package:uhamka_mobile/data_mahasiswa_page.dart';
+import 'package:uhamka_mobile/jadwal_matakuliah_page.dart';
 import 'package:uhamka_mobile/login_page.dart';
 import 'package:uhamka_mobile/visi_misi_page.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
     VisiMisiPage.tag: (context) => VisiMisiPage(),
     DataDosenPage.tag: (context) => DataDosenPage(),
     DataMahasiswaPage.tag: (context) => DataMahasiswaPage(),
+    JadwalMatakuliahPage.tag: (context) => JadwalMatakuliahPage(),
   };
 
   @override
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: LoginPage(),
+      // home: DashboardPage(),
       routes: routes,
     );
   }

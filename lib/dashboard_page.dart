@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uhamka_mobile/data_dosen_page.dart';
 import 'package:uhamka_mobile/data_mahasiswa_page.dart';
+import 'package:uhamka_mobile/jadwal_matakuliah_page.dart';
 import 'package:uhamka_mobile/visi_misi_page.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -13,10 +14,16 @@ class DashboardPage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Text('Profil'),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
+            ),
+            ListTile(
+              title: Text('Keluar'),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
@@ -28,10 +35,11 @@ class DashboardPage extends StatelessWidget {
         children: <Widget>[
           new Container(
             decoration: new BoxDecoration(
-                // color: Colors.red,
-                image: DecorationImage(
-              image: AssetImage('assets/teknik.png'),
-            )),
+              color: Colors.purple,
+              image: DecorationImage(
+                  image: AssetImage('assets/teknik.png'),
+                  alignment: Alignment.topCenter),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -39,24 +47,24 @@ class DashboardPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(4),
-                    child: SizedBox(
-                      width: 110,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(VisiMisiPage.tag);
-                        },
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.photo),
-                            Text('Himpunan'),
-                            Text('Mahasiswa'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.all(4),
+                  //   child: SizedBox(
+                  //     width: 110,
+                  //     child: RaisedButton(
+                  //       onPressed: () {
+                  //         Navigator.of(context).pushNamed(VisiMisiPage.tag);
+                  //       },
+                  //       child: Column(
+                  //         children: <Widget>[
+                  //           Icon(Icons.photo),
+                  //           Text('Himpunan'),
+                  //           Text('Mahasiswa'),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Padding(
                     padding: EdgeInsets.all(4),
                     child: SizedBox(
@@ -72,7 +80,25 @@ class DashboardPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(JadwalMatakuliahPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.add_alarm),
+                            Text('Jadwal'),
+                            Text('Mata Kuliah'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Column(
@@ -102,7 +128,8 @@ class DashboardPage extends StatelessWidget {
                       width: 110,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(DataMahasiswaPage.tag);
+                          Navigator.of(context)
+                              .pushNamed(DataMahasiswaPage.tag);
                         },
                         child: Column(
                           children: <Widget>[
@@ -127,9 +154,9 @@ class DashboardPage extends StatelessWidget {
                         onPressed: () {},
                         child: Column(
                           children: <Widget>[
-                            Icon(Icons.book),
-                            Text('Mata'),
-                            Text('Kuliah'),
+                            Icon(Icons.assignment),
+                            Text('Bimbingan'),
+                            Text('Skripsi'),
                           ],
                         ),
                       ),
