@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:uhamka_mobile/bimbingan_skripsi_page.dart';
 import 'package:uhamka_mobile/data_dosen_page.dart';
 import 'package:uhamka_mobile/data_mahasiswa_page.dart';
 import 'package:uhamka_mobile/jadwal_matakuliah_page.dart';
+import 'package:uhamka_mobile/nilai_mahasiswa.dart';
 import 'package:uhamka_mobile/visi_misi_page.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -13,10 +15,19 @@ class DashboardPage extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            DrawerHeader(
-              child: Text('Profil'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            // DrawerHeader(
+            //   child: Text('Profil'),
+            //   decoration: BoxDecoration(
+            //     color: Colors.blue,
+            //   ),
+            // ),
+            UserAccountsDrawerHeader(
+              accountName: Text('User Name'),
+              accountEmail: Text('username@yahoo.com'),
+              currentAccountPicture: CircleAvatar(
+                child: FlutterLogo(
+                  size: 42.0,
+                ),
               ),
             ),
             ListTile(
@@ -87,7 +98,8 @@ class DashboardPage extends StatelessWidget {
                       width: 110,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(JadwalMatakuliahPage.tag);
+                          Navigator.of(context)
+                              .pushNamed(JadwalMatakuliahPage.tag);
                         },
                         child: Column(
                           children: <Widget>[
@@ -151,7 +163,10 @@ class DashboardPage extends StatelessWidget {
                     child: SizedBox(
                       width: 110,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(BimbinganSkripsiPage.tag);
+                        },
                         child: Column(
                           children: <Widget>[
                             Icon(Icons.assignment),
@@ -167,7 +182,10 @@ class DashboardPage extends StatelessWidget {
                     child: SizedBox(
                       width: 110,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(NilaiMahasiswaPage.tag);
+                        },
                         child: Column(
                           children: <Widget>[
                             Icon(Icons.book),

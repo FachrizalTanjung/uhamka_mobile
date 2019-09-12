@@ -1,17 +1,51 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<DataMahasiswa>> fetchResults(http.Client client) async {
+  // final response = await client.get('http://192.168.43.91:8085/uhamka-ws/mahasiswa/get-all');
+  final response = await client
+      .get('http://baliimaginerentcar.com/uhamka-ws/mahasiswa/get-all');
+  return compute(parseResults, response.body);
+}
+
+List<DataMahasiswa> parseResults(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed
+      .map<DataMahasiswa>((json) => DataMahasiswa.fromJson(json))
+      .toList();
+}
 
 class DataMahasiswaPage extends StatefulWidget {
   static String tag = 'data-mahasiswa-page';
+  final DataMahasiswaDataSource _dataMahasiswaDataSource =
+      DataMahasiswaDataSource([]);
+  final bool isLoaded = false;
 
   @override
   State<StatefulWidget> createState() => _DataMahasiswaPageState();
 }
 
 class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
+  DataMahasiswaDataSource _dataMahasiswaDataSource =
+      DataMahasiswaDataSource([]);
+  bool isLoaded = false;
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+
+  Future<void> getDataMhs() async {
+    final results = await fetchResults(http.Client());
+    if (!isLoaded) {
+      setState(() {
+        _dataMahasiswaDataSource = DataMahasiswaDataSource(results);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    getDataMhs();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Mahasiswa'),
@@ -28,32 +62,9 @@ class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _dataMahasiswaDataSource,
         ),
       ),
-      // Scrollbar(
-      //   child: ListView(
-      //     padding: EdgeInsets.all(20.0),
-      //     children: <Widget>[
-      //       PaginatedDataTable(
-      //         header: const Text('Nutrition'),
-      //         rowsPerPage: _rowsPerPage,
-      //         onRowsPerPageChanged: (int value) {
-      //           setState(() {
-      //             _rowsPerPage = value;
-      //           });
-      //         },
-      //         columns: <DataColumn>[
-      //           DataColumn(label: Text('NIP')),
-      //           DataColumn(label: Text('Nama')),
-      //           DataColumn(label: Text('Alamat')),
-      //           DataColumn(label: Text('No. HP')),
-      //         ],
-      //         source: _DataMahasiswaDataSource,
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
@@ -75,44 +86,35 @@ class DataMahasiswa {
   bool selected = false;
 
   DataMahasiswa(
-      this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan);
+      {this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan});
+
+  factory DataMahasiswa.fromJson(Map<String, dynamic> json) {
+    return DataMahasiswa(
+        nim: json['nim'] as String,
+        nama: json['nama'] as String,
+        tempatTglLahir: json['tempatTglLahir'] as String,
+        alamat: json['alamat'] as String,
+        angkatan: json['angkatan'] as String);
+  }
 }
 
 class DataMahasiswaDataSource extends DataTableSource {
   int _selectedCount = 0;
-
-  final List<DataMahasiswa> _listMhs = <DataMahasiswa>[
-    new DataMahasiswa('14321', 'ambari', 'Bekasi 01-08-1997', 'Bekasi', '2017'),
-    new DataMahasiswa(
-        '122333', 'Rana Rani', 'Bekasi 01-01-1991', 'Bekasi Timur', '2011'),
-    new DataMahasiswa(
-        '1223335', 'sinta', 'bekasi 22- 03 -1998', 'jakarta', '2014'),
-    new DataMahasiswa(
-        '1223336', 'susi', 'bekasi 09- 03 -1998', 'Bekasi tambun', 'Gener'),
-    new DataMahasiswa(
-        '1323133', 'andi asep', 'bekasi 09- 03 -1998', 'Bekasi tambun', '2016'),
-  ];
+  final List<DataMahasiswa> _listMhs;
+  DataMahasiswaDataSource(this._listMhs);
 
   @override
   DataRow getRow(int index) {
     assert(index >= 0);
     if (index >= _listMhs.length) return null;
     final DataMahasiswa dataMhs = _listMhs[index];
-    return DataRow.byIndex(index: index,
-        // selected: DataMahasiswa.selected,
-        // onSelectChanged: (bool value) {
-        //   _selectedCount += value ? 1 : -1;
-        //   assert(_selectedCount >= 0);
-        //   DataMahasiswa.selected = value;
-        //   notifyListeners();
-        // },
-        cells: <DataCell>[
-          DataCell(Text('${dataMhs.nim}')),
-          DataCell(Text('${dataMhs.nama}')),
-          DataCell(Text('${dataMhs.tempatTglLahir}')),
-          DataCell(Text('${dataMhs.alamat}')),
-          DataCell(Text('${dataMhs.angkatan}')),
-        ]);
+    return DataRow.byIndex(index: index, cells: <DataCell>[
+      DataCell(Text('${dataMhs.nim}')),
+      DataCell(Text('${dataMhs.nama}')),
+      DataCell(Text('${dataMhs.tempatTglLahir}')),
+      DataCell(Text('${dataMhs.alamat}')),
+      DataCell(Text('${dataMhs.angkatan}')),
+    ]);
   }
 
   @override
