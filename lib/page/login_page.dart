@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uhamka_mobile/dashboard_page.dart';
+import 'package:uhamka_mobile/page/dashboard_page.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:uhamka_mobile/services/MahasiswaService.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       String qrResult = await BarcodeScanner.scan();
       setState(() {
+        print(qrResult);
         Navigator.pushReplacementNamed(context, DashboardPage.tag);
       });
     } on PlatformException catch (ex) {
@@ -56,8 +58,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              ],
+              children: <Widget>[],
             ),
           ),
         ],

@@ -3,20 +3,22 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:uhamka_mobile/model/Mahasiswa.dart';
+import 'package:uhamka_mobile/services/MahasiswaService.dart';
 
-Future<List<DataMahasiswa>> fetchResults(http.Client client) async {
-  // final response = await client.get('http://192.168.43.91:8085/uhamka-ws/mahasiswa/get-all');
-  final response = await client
-      .get('http://baliimaginerentcar.com/uhamka-ws/mahasiswa/get-all');
-  return compute(parseResults, response.body);
-}
+// Future<List<DataMahasiswa>> fetchResults(http.Client client) async {
+//   // final response = await client.get('http://192.168.43.91:8085/uhamka-ws/mahasiswa/get-all');
+//   final response = await client
+//       .get('http://baliimaginerentcar.com/uhamka-ws/mahasiswa/get-all');
+//   return compute(parseResults, response.body);
+// }
 
-List<DataMahasiswa> parseResults(String responseBody) {
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  return parsed
-      .map<DataMahasiswa>((json) => DataMahasiswa.fromJson(json))
-      .toList();
-}
+// List<DataMahasiswa> parseResults(String responseBody) {
+//   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+//   return parsed
+//       .map<DataMahasiswa>((json) => DataMahasiswa.fromJson(json))
+//       .toList();
+// }
 
 class DataMahasiswaPage extends StatefulWidget {
   static String tag = 'data-mahasiswa-page';
@@ -33,12 +35,21 @@ class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
       DataMahasiswaDataSource([]);
   bool isLoaded = false;
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  MahasiswaService mahasiswaService;
+
+  @override
+  void initState() {
+    super.initState();
+    mahasiswaService = MahasiswaService();
+  }
 
   Future<void> getDataMhs() async {
-    final results = await fetchResults(http.Client());
+    final results = await mahasiswaService.getAllMahasiswa();
+    print('is Loaded : $isLoaded');
     if (!isLoaded) {
       setState(() {
         _dataMahasiswaDataSource = DataMahasiswaDataSource(results);
+        isLoaded = true;
       });
     }
   }
@@ -77,37 +88,37 @@ const kTableColumns = <DataColumn>[
   DataColumn(label: Text('Angkatan')),
 ];
 
-class DataMahasiswa {
-  final String nim;
-  final String nama;
-  final String tempatTglLahir;
-  final String alamat;
-  final String angkatan;
-  bool selected = false;
+// class DataMahasiswa {
+//   final String nim;
+//   final String nama;
+//   final String tempatTglLahir;
+//   final String alamat;
+//   final String angkatan;
+//   bool selected = false;
 
-  DataMahasiswa(
-      {this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan});
+//   DataMahasiswa(
+//       {this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan});
 
-  factory DataMahasiswa.fromJson(Map<String, dynamic> json) {
-    return DataMahasiswa(
-        nim: json['nim'] as String,
-        nama: json['nama'] as String,
-        tempatTglLahir: json['tempatTglLahir'] as String,
-        alamat: json['alamat'] as String,
-        angkatan: json['angkatan'] as String);
-  }
-}
+//   factory DataMahasiswa.fromJson(Map<String, dynamic> json) {
+//     return DataMahasiswa(
+//         nim: json['nim'] as String,
+//         nama: json['nama'] as String,
+//         tempatTglLahir: json['tempatTglLahir'] as String,
+//         alamat: json['alamat'] as String,
+//         angkatan: json['angkatan'] as String);
+//   }
+// }
 
 class DataMahasiswaDataSource extends DataTableSource {
   int _selectedCount = 0;
-  final List<DataMahasiswa> _listMhs;
+  final List<Mahasiswa> _listMhs;
   DataMahasiswaDataSource(this._listMhs);
 
   @override
   DataRow getRow(int index) {
     assert(index >= 0);
     if (index >= _listMhs.length) return null;
-    final DataMahasiswa dataMhs = _listMhs[index];
+    final Mahasiswa dataMhs = _listMhs[index];
     return DataRow.byIndex(index: index, cells: <DataCell>[
       DataCell(Text('${dataMhs.nim}')),
       DataCell(Text('${dataMhs.nama}')),

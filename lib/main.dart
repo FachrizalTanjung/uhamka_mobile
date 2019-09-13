@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:uhamka_mobile/bimbingan_skripsi_page.dart';
-import 'package:uhamka_mobile/dashboard_page.dart';
-import 'package:uhamka_mobile/data_dosen_page.dart';
-import 'package:uhamka_mobile/data_mahasiswa_page.dart';
-import 'package:uhamka_mobile/jadwal_matakuliah_page.dart';
-import 'package:uhamka_mobile/login_page.dart';
-import 'package:uhamka_mobile/nilai_mahasiswa.dart';
-import 'package:uhamka_mobile/visi_misi_page.dart';
+import 'package:uhamka_mobile/page/bimbingan_skripsi_page.dart';
+import 'package:uhamka_mobile/page/dashboard_page.dart';
+import 'package:uhamka_mobile/page/data_dosen_page.dart';
+import 'package:uhamka_mobile/page/data_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/jadwal_matakuliah_page.dart';
+import 'package:uhamka_mobile/page/login_page.dart';
+import 'package:uhamka_mobile/page/nilai_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/visi_misi_page.dart';
 
 void main() => runApp(MyApp());
 

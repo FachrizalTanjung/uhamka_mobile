@@ -44,24 +44,27 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: const Text('Nilai Mahasiswa'),
           actions: <Widget>[],
         ),
-        body: Container(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: <Widget>[
-                cbNama(),
-                cbMatkul(),
-                txtTugas(),
-                txtKuis(),
-                txtUts(),
-                txtUas(),
-                saveButton(),
-                cancelButton()
-              ],
+        body: SingleChildScrollView(
+          child: Container(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: <Widget>[
+                  cbNama(),
+                  cbMatkul(),
+                  txtTugas(),
+                  txtKuis(),
+                  txtUts(),
+                  txtUas(),
+                  saveButton(),
+                  cancelButton()
+                ],
+              ),
             ),
           ),
         ));
@@ -69,7 +72,7 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
 
   Widget cbNama() {
     return ListTile(
-          trailing: DropdownButton<String>(
+      trailing: DropdownButton<String>(
         value: nama,
         onChanged: (String value) {
           setState(() {
@@ -83,7 +86,7 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
 
   Widget cbMatkul() {
     return ListTile(
-          trailing: DropdownButton<String>(
+      trailing: DropdownButton<String>(
         value: matkul,
         onChanged: (String value) {
           setState(() {
@@ -101,6 +104,10 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
         labelText: 'Tugas',
       ),
       keyboardType: TextInputType.number,
+      inputFormatters: [
+        WhitelistingTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(3)
+      ],
     );
   }
 
@@ -113,7 +120,7 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
       keyboardType: TextInputType.number,
       inputFormatters: [
         WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(2)
+        LengthLimitingTextInputFormatter(3)
       ],
     );
   }
@@ -127,7 +134,7 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
       keyboardType: TextInputType.number,
       inputFormatters: [
         WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(2)
+        LengthLimitingTextInputFormatter(3)
       ],
     );
   }
@@ -141,7 +148,7 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
       keyboardType: TextInputType.number,
       inputFormatters: [
         WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(2)
+        LengthLimitingTextInputFormatter(3)
       ],
     );
   }
@@ -153,6 +160,10 @@ class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
         if (formKey.currentState.validate()) {
           formKey.currentState.save();
           print('test');
+          print(nama);
+          print(matkul);
+          print(tugas);
+          print(kuis);
         }
       },
       child: Text('Simpan'),
