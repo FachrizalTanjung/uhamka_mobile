@@ -57,24 +57,6 @@ class DashboardPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  // Padding(
-                  //   padding: EdgeInsets.all(4),
-                  //   child: SizedBox(
-                  //     width: 110,
-                  //     child: RaisedButton(
-                  //       onPressed: () {
-                  //         Navigator.of(context).pushNamed(VisiMisiPage.tag);
-                  //       },
-                  //       child: Column(
-                  //         children: <Widget>[
-                  //           Icon(Icons.photo),
-                  //           Text('Himpunan'),
-                  //           Text('Mahasiswa'),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                     padding: EdgeInsets.all(4),
                     child: SizedBox(

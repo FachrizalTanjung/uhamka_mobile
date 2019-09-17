@@ -1,24 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-Future<List<DataDosen>> fetchResults(http.Client client) async {
-  // final response = await client.get('http://192.168.43.91:8085/uhamka-ws/dosen/get-all');
-  final response =
-      await client.get('http://baliimaginerentcar.com/uhamka-ws/dosen/get-all');
-  return compute(parseResults, response.body);
-}
-
-List<DataDosen> parseResults(String responseBody) {
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  return parsed.map<DataDosen>((json) => DataDosen.fromJson(json)).toList();
-}
+import 'package:uhamka_mobile/model/Dosen.dart';
+import 'package:uhamka_mobile/services/DosenService.dart';
 
 class DataDosenPage extends StatefulWidget {
   static String tag = 'data-dosen-page';
-  final DataDosenDataSource _dataDosenDataSource = DataDosenDataSource([]);
+  final DataDosenDataSource _dosenDataSource = DataDosenDataSource([]);
   final bool isLoaded = false;
 
   @override
@@ -27,20 +13,29 @@ class DataDosenPage extends StatefulWidget {
 
 class _DataDosenPageState extends State<DataDosenPage> {
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-  DataDosenDataSource _dataDosenDataSource = DataDosenDataSource([]);
+  DataDosenDataSource _dosenDataSource = DataDosenDataSource([]);
   bool isLoaded = false;
-  Future<void> getDataDsn() async {
-    final results = await fetchResults(http.Client());
+  DosenService dosenService;
+
+  @override
+  void initState() {
+    super.initState();
+    dosenService = DosenService();
+  }
+
+  Future<void> getAllDataDosen() async {
+    final results = await dosenService.getAllDataDosen();
     if (!isLoaded) {
       setState(() {
-        _dataDosenDataSource = DataDosenDataSource(results);
+        _dosenDataSource = DataDosenDataSource(results);
+        isLoaded = true;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    getDataDsn();
+    getAllDataDosen();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Dosen'),
@@ -57,7 +52,7 @@ class _DataDosenPageState extends State<DataDosenPage> {
             });
           },
           columns: kTableColumns,
-          source: _dataDosenDataSource,
+          source: _dosenDataSource,
         ),
       ),
     );
@@ -71,35 +66,16 @@ const kTableColumns = <DataColumn>[
   DataColumn(label: Text('No HP')),
 ];
 
-class DataDosen {
-  DataDosen({this.nip, this.nama, this.alamat, this.noHp});
-
-  final String nip;
-  final String nama;
-  final String alamat;
-  final String noHp;
-  bool selected = false;
-
-  factory DataDosen.fromJson(Map<String, dynamic> json) {
-    var dataDosen = DataDosen(
-        nip: json['nip'] as String,
-        nama: json['nama'] as String,
-        alamat: json['alamat'] as String,
-        noHp: json['noHp'] as String);
-    return dataDosen;
-  }
-}
-
 class DataDosenDataSource extends DataTableSource {
   int _selectedCount = 0;
-  final List<DataDosen> _listDosen;
+  final List<Dosen> _listDosen;
   DataDosenDataSource(this._listDosen);
 
   @override
   DataRow getRow(int index) {
     assert(index >= 0);
     if (index >= _listDosen.length) return null;
-    final DataDosen dataDosen = _listDosen[index];
+    final Dosen dataDosen = _listDosen[index];
     return DataRow.byIndex(index: index, cells: <DataCell>[
       DataCell(Text('${dataDosen.nip}')),
       DataCell(Text('${dataDosen.nama}')),

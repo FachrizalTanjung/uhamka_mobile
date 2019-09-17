@@ -8,8 +8,13 @@ class Mahasiswa {
   final String angkatan;
   bool selected = false;
 
-  Mahasiswa(
-      {this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan});
+  Mahasiswa({
+    this.nim,
+    this.nama,
+    this.tempatTglLahir,
+    this.alamat,
+    this.angkatan,
+  });
 
   factory Mahasiswa.fromJson(Map<String, dynamic> map) => Mahasiswa(
       nim: map['nim'] as String,
@@ -20,11 +25,11 @@ class Mahasiswa {
 
   Map<String, dynamic> toJson() {
     return {
-      "nim": nim,
-      "nama": nama,
-      "tempatTglLahir": tempatTglLahir,
-      "alamat": alamat,
-      "angkatan": angkatan
+      'nim': nim,
+      'nama': nama,
+      'tempatTglLahir': tempatTglLahir,
+      'alamat': alamat,
+      'angkatan': angkatan,
     };
   }
 }

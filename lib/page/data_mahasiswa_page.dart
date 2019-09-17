@@ -1,28 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:uhamka_mobile/model/Mahasiswa.dart';
 import 'package:uhamka_mobile/services/MahasiswaService.dart';
 
-// Future<List<DataMahasiswa>> fetchResults(http.Client client) async {
-//   // final response = await client.get('http://192.168.43.91:8085/uhamka-ws/mahasiswa/get-all');
-//   final response = await client
-//       .get('http://baliimaginerentcar.com/uhamka-ws/mahasiswa/get-all');
-//   return compute(parseResults, response.body);
-// }
-
-// List<DataMahasiswa> parseResults(String responseBody) {
-//   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-//   return parsed
-//       .map<DataMahasiswa>((json) => DataMahasiswa.fromJson(json))
-//       .toList();
-// }
-
 class DataMahasiswaPage extends StatefulWidget {
   static String tag = 'data-mahasiswa-page';
-  final DataMahasiswaDataSource _dataMahasiswaDataSource =
+  final DataMahasiswaDataSource _mahasiswaDataSource =
       DataMahasiswaDataSource([]);
   final bool isLoaded = false;
 
@@ -31,8 +13,7 @@ class DataMahasiswaPage extends StatefulWidget {
 }
 
 class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
-  DataMahasiswaDataSource _dataMahasiswaDataSource =
-      DataMahasiswaDataSource([]);
+  DataMahasiswaDataSource _mahasiswaDataSource = DataMahasiswaDataSource([]);
   bool isLoaded = false;
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   MahasiswaService mahasiswaService;
@@ -43,12 +24,11 @@ class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
     mahasiswaService = MahasiswaService();
   }
 
-  Future<void> getDataMhs() async {
-    final results = await mahasiswaService.getAllMahasiswa();
-    print('is Loaded : $isLoaded');
+  Future<void> getAllDataMhs() async {
+    final results = await mahasiswaService.getAllDataMhs();
     if (!isLoaded) {
       setState(() {
-        _dataMahasiswaDataSource = DataMahasiswaDataSource(results);
+        _mahasiswaDataSource = DataMahasiswaDataSource(results);
         isLoaded = true;
       });
     }
@@ -56,7 +36,7 @@ class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
 
   @override
   Widget build(BuildContext context) {
-    getDataMhs();
+    getAllDataMhs();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Mahasiswa'),
@@ -73,7 +53,7 @@ class _DataMahasiswaPageState extends State<DataMahasiswaPage> {
             });
           },
           columns: kTableColumns,
-          source: _dataMahasiswaDataSource,
+          source: _mahasiswaDataSource,
         ),
       ),
     );
@@ -87,27 +67,6 @@ const kTableColumns = <DataColumn>[
   DataColumn(label: Text('Alamat')),
   DataColumn(label: Text('Angkatan')),
 ];
-
-// class DataMahasiswa {
-//   final String nim;
-//   final String nama;
-//   final String tempatTglLahir;
-//   final String alamat;
-//   final String angkatan;
-//   bool selected = false;
-
-//   DataMahasiswa(
-//       {this.nim, this.nama, this.tempatTglLahir, this.alamat, this.angkatan});
-
-//   factory DataMahasiswa.fromJson(Map<String, dynamic> json) {
-//     return DataMahasiswa(
-//         nim: json['nim'] as String,
-//         nama: json['nama'] as String,
-//         tempatTglLahir: json['tempatTglLahir'] as String,
-//         alamat: json['alamat'] as String,
-//         angkatan: json['angkatan'] as String);
-//   }
-// }
 
 class DataMahasiswaDataSource extends DataTableSource {
   int _selectedCount = 0;

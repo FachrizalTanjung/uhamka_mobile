@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:uhamka_mobile/model/DataJadwal.dart';
+import 'package:uhamka_mobile/services/JadwalService.dart';
 
 class JadwalMatakuliahPage extends StatefulWidget {
   static String tag = 'jadwal-matakuliah-page';
+  final DataJadwalDataSource _jadwalDataSource = DataJadwalDataSource([]);
+  final bool isLoaded = false;
 
   @override
   _JadwalMatakuliahPageState createState() => _JadwalMatakuliahPageState();
@@ -9,6 +13,25 @@ class JadwalMatakuliahPage extends StatefulWidget {
 
 class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  DataJadwalDataSource _jadwalDataSource = DataJadwalDataSource([]);
+  bool isLoaded = false;
+  JadwalService jadwalService;
+
+  @override
+  void initState() {
+    super.initState();
+    jadwalService = JadwalService();
+  }
+
+  Future<void> getAllDataJadwal() async {
+    final results = await jadwalService.getAllDataJadwal();
+    if (!isLoaded) {
+      setState(() {
+        _jadwalDataSource = DataJadwalDataSource(results);
+        isLoaded = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +47,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -38,7 +61,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -52,7 +75,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -66,7 +89,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -80,7 +103,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -94,7 +117,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
       SingleChildScrollView(
@@ -108,11 +131,10 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
             });
           },
           columns: kTableColumns,
-          source: DataMahasiswaDataSource(),
+          source: _jadwalDataSource,
         ),
       ),
     ];
-
     final _kTabs = <Tab>[
       Tab(
         text: 'Senin',
@@ -136,7 +158,7 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
         text: 'Minggu',
       ),
     ];
-
+    getAllDataJadwal();
     return DefaultTabController(
       length: _kTabs.length,
       child: Scaffold(
@@ -159,27 +181,15 @@ class _JadwalMatakuliahPageState extends State<JadwalMatakuliahPage> {
 
 const kTableColumns = <DataColumn>[
   DataColumn(label: Text('Dosen')),
-  DataColumn(label: Text('Hari')),
+  DataColumn(label: Text('Mata Kuliah')),
   DataColumn(label: Text('Jam')),
   DataColumn(label: Text('Ruang')),
 ];
 
-class DataJadwal {
-  final String dosen;
-  final String hari;
-  final String jam;
-  final String ruang;
-  bool selected = false;
-
-  DataJadwal(this.dosen, this.hari, this.jam, this.ruang);
-}
-
-class DataMahasiswaDataSource extends DataTableSource {
+class DataJadwalDataSource extends DataTableSource {
   int _selectedCount = 0;
-
-  final List<DataJadwal> _listJadwal = <DataJadwal>[
-    new DataJadwal('Ridho', 'Senin', '07.50 - 09.30', 'FT 406'),
-  ];
+  final List<DataJadwal> _listJadwal;
+  DataJadwalDataSource(this._listJadwal);
 
   @override
   DataRow getRow(int index) {
@@ -187,10 +197,10 @@ class DataMahasiswaDataSource extends DataTableSource {
     if (index >= _listJadwal.length) return null;
     final DataJadwal dataJadwal = _listJadwal[index];
     return DataRow.byIndex(index: index, cells: <DataCell>[
-      DataCell(Text('${dataJadwal.dosen}')),
-      DataCell(Text('${dataJadwal.hari}')),
-      DataCell(Text('${dataJadwal.jam}')),
-      DataCell(Text('${dataJadwal.ruang}')),
+      DataCell(Text('${dataJadwal.namaDosen}')),
+      DataCell(Text('${dataJadwal.mataKuliah}')),
+      DataCell(Text('${dataJadwal.jamNgajar}')),
+      DataCell(Text('${dataJadwal.ruanganNgajar}')),
     ]);
   }
 

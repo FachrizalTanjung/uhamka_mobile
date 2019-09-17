@@ -1,6 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uhamka_mobile/mixins/validation.dart';
+import 'package:uhamka_mobile/model/Mahasiswa.dart';
+import 'package:uhamka_mobile/model/Matkul.dart';
+import 'package:uhamka_mobile/services/MahasiswaService.dart';
+import 'package:uhamka_mobile/services/MatkulService.dart';
+import 'package:http/http.dart' as http;
+
+class Response {
+  final String status;
+  final String message;
+
+  Response({this.status, this.message});
+
+  factory Response.fromJson(Map<String, dynamic> json) {
+    return Response(
+      status: json['status'],
+      message: json['message'],
+    );
+  }
+}
 
 class NilaiMahasiswaPage extends StatefulWidget {
   static String tag = 'nilai-mahasiswa';
@@ -11,170 +32,188 @@ class NilaiMahasiswaPage extends StatefulWidget {
 
 class _NilaiMahasiswaPageState extends State<NilaiMahasiswaPage>
     with Validation {
-  static const menuItems = <String>['Dias', 'Raka', 'Rani'];
-  static const matkulItems = <String>['animasi', 'ibadah'];
+  String _nim;
+  String _idMk;
+  // String _tugas;
+  // String _kuis;
+  // String _uts;
+  // String _uas;
+  List<Mahasiswa> _listMhs = List<Mahasiswa>();
+  List<Matkul> _listMk = List<Matkul>();
+  MahasiswaService mahasiswaService;
+  MatkulService matkulService;
+  String _response = '';
+  // bool apiCall = false;
 
-  final List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
-      .map(
-        (String value) => DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
+  Future<Response> post(String url, var body) async {
+    return await http.post(Uri.encodeFull(url),
+        body: body,
+        headers: {"Accept": "application/json"}).then((http.Response response) {
+      final int statusCode = response.statusCode;
 
-  final List<DropdownMenuItem<String>> _ddItems = matkulItems
-      .map(
-        (String value) => DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception("Error while fetching data");
+      }
+      return Response.fromJson(json.decode(response.body));
+    });
+  }
 
-  final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    mahasiswaService = MahasiswaService();
+    mahasiswaService.getAllDataMhs().then((item) {
+      setState(() {
+        _listMhs = item;
+      });
+    });
+    matkulService = MatkulService();
+    matkulService.getAllDataMatkul().then((item) {
+      setState(() {
+        _listMk = item;
+      });
+    });
+  }
 
-  String nama = 'Dias';
-  String matkul = 'animasi';
-  int tugas = 0;
-  int kuis = 0;
-  int uts = 0;
-  int uas = 0;
+  // Widget getProperWidget() {
+  //   if (apiCall)
+  //     return AlertDialog(
+  //         content: new Column(
+  //       children: <Widget>[CircularProgressIndicator(), Text("Please wait")],
+  //     ));
+  //   else
+  //     return Center(
+  //         child: Text(_response, style: new TextStyle(fontSize: 15.0)));
+  // }
+
+  TextEditingController controllerTugas = TextEditingController();
+  TextEditingController controllerKuis = TextEditingController();
+  TextEditingController controllerUts = TextEditingController();
+  TextEditingController controllerUas = TextEditingController();
+
+  void _callAPI() {
+    setState(() {
+      http.post('http://baliimaginerentcar.com/uhamka-ws/nilai/insert', body: {
+        "nim": _nim,
+        "idMatkul": _idMk,
+        "tugas": controllerTugas.text,
+        "kuis": controllerKuis.text,
+        "uts": controllerUts.text,
+        "uas": controllerUas.text
+      });
+    });
+  }
+
+  // final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          title: const Text('Nilai Mahasiswa'),
-          actions: <Widget>[],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: <Widget>[
-                  cbNama(),
-                  cbMatkul(),
-                  txtTugas(),
-                  txtKuis(),
-                  txtUts(),
-                  txtUas(),
-                  saveButton(),
-                  cancelButton()
-                ],
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: const Text('Nilai Mahasiswa'),
+        actions: <Widget>[],
+      ),
+      body: SafeArea(
+        child: ListView(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                title: DropdownButton(
+                  value: _nim,
+                  onChanged: (newVal) {
+                    setState(() {
+                      _nim = newVal;
+                    });
+                  },
+                  items: _listMhs.map((item) {
+                    return new DropdownMenuItem(
+                      child: Text(item.nama),
+                      value: item.nim,
+                    );
+                  }).toList(),
+                ),
               ),
             ),
-          ),
-        ));
-  }
-
-  Widget cbNama() {
-    return ListTile(
-      trailing: DropdownButton<String>(
-        value: nama,
-        onChanged: (String value) {
-          setState(() {
-            nama = value;
-          });
-        },
-        items: _dropDownMenuItems,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                title: DropdownButton(
+                  value: _idMk,
+                  onChanged: (newVal) {
+                    setState(() {
+                      _idMk = newVal;
+                    });
+                  },
+                  items: _listMk.map((item) {
+                    return new DropdownMenuItem(
+                      child: Text(item.namaMatkul),
+                      value: item.idMatkul,
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+            TextField(
+              controller: controllerTugas,
+              decoration: InputDecoration(
+                labelText: 'Tugas',
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3)
+              ],
+            ),
+            TextField(
+              controller: controllerKuis,
+              decoration: InputDecoration(
+                labelText: 'Kuis',
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3)
+              ],
+            ),
+            TextField(
+              controller: controllerUts,
+              decoration: InputDecoration(
+                labelText: 'UTS',
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3)
+              ],
+            ),
+            TextField(
+              controller: controllerUas,
+              decoration: InputDecoration(
+                labelText: 'UAS',
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3)
+              ],
+            ),
+            RaisedButton(
+              color: Colors.blueAccent,
+              onPressed: () {
+                // setState(() {
+                //   apiCall = true;
+                // });
+                _callAPI();
+                Navigator.pop(context);
+              },
+              child: Text('Simpan'),
+            ),
+            // getProperWidget(),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget cbMatkul() {
-    return ListTile(
-      trailing: DropdownButton<String>(
-        value: matkul,
-        onChanged: (String value) {
-          setState(() {
-            matkul = value;
-          });
-        },
-        items: _ddItems,
-      ),
-    );
-  }
-
-  Widget txtTugas() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Tugas',
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(3)
-      ],
-    );
-  }
-
-  Widget txtKuis() {
-    return TextFormField(
-      autovalidate: true,
-      decoration: InputDecoration(
-        labelText: 'Kuis',
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(3)
-      ],
-    );
-  }
-
-  Widget txtUts() {
-    return TextFormField(
-      autovalidate: true,
-      decoration: InputDecoration(
-        labelText: 'UTS',
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(3)
-      ],
-    );
-  }
-
-  Widget txtUas() {
-    return TextFormField(
-      autovalidate: true,
-      decoration: InputDecoration(
-        labelText: 'UAS',
-      ),
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(3)
-      ],
-    );
-  }
-
-  Widget saveButton() {
-    return RaisedButton(
-      color: Colors.blueAccent,
-      onPressed: () {
-        if (formKey.currentState.validate()) {
-          formKey.currentState.save();
-          print('test');
-          print(nama);
-          print(matkul);
-          print(tugas);
-          print(kuis);
-        }
-      },
-      child: Text('Simpan'),
-    );
-  }
-
-  Widget cancelButton() {
-    return RaisedButton(
-      color: Colors.blueAccent,
-      onPressed: () {},
-      child: Text('Batal'),
     );
   }
 }
