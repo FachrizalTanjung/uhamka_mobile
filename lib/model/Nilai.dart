@@ -1,12 +1,12 @@
 import 'dart:convert' show json;
 
 class Nilai {
-  String nim;
+  int nim;
   String idMatkul;
-  String tugas;
-  String kuis;
-  String uts;
-  String uas;
+  int tugas;
+  int kuis;
+  int uts;
+  int uas;
 
   Nilai({
     this.nim,
@@ -18,12 +18,12 @@ class Nilai {
   });
 
   factory Nilai.fromJson(Map<String, dynamic> map) => Nilai(
-        nim: map['nim'] as String,
+        nim: map['nim'] as int,
         idMatkul: map['idMatkul'] as String,
-        tugas: map['tugas'] as String,
-        kuis: map['kuis'] as String,
-        uts: map['uts'] as String,
-        uas: map['uas'] as String,
+        tugas: map['tugas'] as int,
+        kuis: map['kuis'] as int,
+        uts: map['uts'] as int,
+        uas: map['uas'] as int,
       );
 
   Map<String, dynamic> toJson() {
@@ -36,4 +36,14 @@ class Nilai {
       'uas': uas,
     };
   }
+}
+
+List<Nilai> fromJson(String jsonData) {
+  final data = json.decode(jsonData);
+  return List<Nilai>.from(data.map((item) => Nilai.fromJson(item)));
+}
+
+String toJson(Nilai nilai) {
+  final jsonData = nilai.toJson();
+  return json.encode(jsonData);
 }

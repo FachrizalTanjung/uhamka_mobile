@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uhamka_mobile/model/Login.dart';
 import 'package:uhamka_mobile/page/bimbingan_skripsi_mahasiswa_page.dart';
 import 'package:uhamka_mobile/page/data_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/isi_krs_page.dart';
 import 'package:uhamka_mobile/page/jadwal_matakuliah_page.dart';
 import 'package:uhamka_mobile/page/kegiatan_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/lihat_nilai_page.dart';
 
 class DashboardMahasiswaPage extends StatelessWidget {
   static String tag = 'dashboard-mahasiswa-page';
@@ -49,6 +51,47 @@ class DashboardMahasiswaPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(IsiKrsPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.calendar_today),
+                            Text('Isi'),
+                            Text('KRS'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4),
+                    child: SizedBox(
+                      width: 110,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(LihatNilaiPage.tag);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.content_paste),
+                            Text('Lihat'),
+                            Text('Nilai'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[

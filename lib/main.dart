@@ -6,8 +6,11 @@ import 'package:uhamka_mobile/page/dashboard_mahasiswa_page.dart';
 // import 'package:uhamka_mobile/page/dashboard_page.dart';
 import 'package:uhamka_mobile/page/data_dosen_page.dart';
 import 'package:uhamka_mobile/page/data_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/input_bimbingan_page.dart';
+import 'package:uhamka_mobile/page/isi_krs_page.dart';
 import 'package:uhamka_mobile/page/jadwal_matakuliah_page.dart';
 import 'package:uhamka_mobile/page/kegiatan_mahasiswa_page.dart';
+import 'package:uhamka_mobile/page/lihat_nilai_page.dart';
 import 'package:uhamka_mobile/page/login_page.dart';
 import 'package:uhamka_mobile/page/nilai_mahasiswa_page.dart';
 import 'package:uhamka_mobile/page/visi_misi_page.dart';
@@ -30,6 +33,9 @@ class MyApp extends StatelessWidget {
     DashboardDosenPage.tag: (context) => DashboardDosenPage(),
     DashboardMahasiswaPage.tag: (context) => DashboardMahasiswaPage(),
     KegiatanMahasiswaPage.tag: (context) => KegiatanMahasiswaPage(),
+    IsiKrsPage.tag: (context) => IsiKrsPage(),
+    LihatNilaiPage.tag: (context) => LihatNilaiPage(),
+    // InputBimbinganPage
   };
 
   @override
@@ -41,8 +47,12 @@ class MyApp extends StatelessWidget {
       ),
       home: LoginPage(),
       // home: DashboardPage(),
-      // home: DashboardMahasiswaPage(),
+      // home: BimbinganSkripsiMahasiswaPage(),
+      // home: BimbinganSkripsiDosenPage(),
+      // home: NilaiMahasiswaPage(),
+      // home: LihatNilaiPage(),
       routes: routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

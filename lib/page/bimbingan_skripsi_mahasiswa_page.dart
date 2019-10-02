@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:uhamka_mobile/model/Bimbingan.dart';
 import 'package:uhamka_mobile/services/BimbinganService.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class BimbinganSkripsiMahasiswaPage extends StatefulWidget {
   static String tag = 'bimbingan-skripsi-mahasiswa-page';
@@ -63,7 +67,28 @@ class _BimbinganSkripsiMahasiswaPageState
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     color: Colors.blueAccent,
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() async {
+                        Directory appDocDir =
+                            await getExternalStorageDirectory();
+                        String appDocPath = appDocDir.path;
+                        print('Document Path : $appDocPath');
+                        final taskId = await FlutterDownloader.enqueue(
+                          url:
+                              'http://baliimaginerentcar.com/uhamka-ws/KartuBimbingan.pdf',
+                          savedDir: '$appDocPath',
+                          showNotification:
+                              true, // show download progress in status bar (for Android)
+                          openFileFromNotification:
+                              true, // click on notification to open downloaded file (for Android)
+                        );
+                        // setState(() {
+                        //   FlutterDownloader.open(taskId: taskId);
+                        // });
+
+                        FlutterDownloader.open(taskId: taskId);
+                      });
+                    },
                     child: Text('Download Kartu Bimbingan'),
                   ),
                 ),
