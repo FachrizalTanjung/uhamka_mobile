@@ -5,6 +5,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:uhamka_mobile/page/dashboard_dosen_page.dart';
 import 'package:uhamka_mobile/page/dashboard_mahasiswa_page.dart';
 import 'package:uhamka_mobile/services/LoginService.dart';
+import 'package:uhamka_mobile/services/NotifAllService.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -109,7 +110,24 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[],
+              children: <Widget>[
+                RaisedButton(
+                  child: Text("Coba Push Notif"),
+                  onPressed: (){
+
+                    var params = new Map<String, dynamic>();
+                    params["title"] = "Notifikasi Mahasiswa";
+                    params["subtitle"] = "Terdapat data nilai baru";
+
+                    NotifAllService.notifAll(params).then((response) async {
+                      print(response.status.toString());
+                    }, onError: (error) {
+                      print(error.toString());
+                    });
+
+                  },
+                )
+              ],
             ),
           ),
         ],
