@@ -1,6 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:uhamka_mobile/page/dashboard_dosen_page.dart';
 import 'package:uhamka_mobile/page/dashboard_mahasiswa_page.dart';
 import 'package:uhamka_mobile/services/LoginService.dart';
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    initPlatformState();
     super.initState();
     loginService = LoginService();
   }
@@ -121,5 +123,48 @@ class _LoginPageState extends State<LoginPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Future<void> initPlatformState() async {
+    await OneSignal.shared.init(
+        "016cabf8-ff7f-42e1-bbb3-e28d10565469",
+        iOSSettings: {
+          OSiOSSettings.autoPrompt: false,
+          OSiOSSettings.inAppLaunchUrl: true
+        }
+    );
+    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+
+//    //Hendle Notification when opened
+//    OneSignal.shared.setNotificationOpenedHandler((notification) {
+//      var notify = notification.notification.payload.additionalData;
+//
+//      if (notify["type"] == "form 1") {
+//        Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//            builder: (context) => Form1(text: notify["type"],),
+//          ),
+//        );
+//      }
+//      if (notify["type"] == "form 2") {
+//        Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//            builder: (context) => Form2(text: notify["type"],),
+//          ),
+//        );
+//      }
+//      if (notify["type"] == "form 3") {
+//        Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//            builder: (context) => Form3(text: notify["type"],),
+//          ),
+//        );
+//      }
+////      print('Opened');
+//    });
   }
 }
